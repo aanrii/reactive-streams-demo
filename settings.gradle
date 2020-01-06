@@ -1,0 +1,5 @@
+rootProject.name = 'reactive-streams-demo'
+
+include ':grpc-server'
+include ':rsocket-server'
+include ':rsocket-client'

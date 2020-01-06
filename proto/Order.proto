@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.aanrii.webflux.demo.proto";
+option java_outer_classname = "OrderProto";
+
+service OrderService {
+  rpc placeOrder (stream Order) returns (stream OrderResult) {}
+}
+
+message Order {
+  string id = 1;
+}
+
+message OrderResult {
+  string order_id = 1;
+  string status = 2;
+  int64 received_at = 3;
+}

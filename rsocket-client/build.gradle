@@ -1,0 +1,69 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'com.google.protobuf' version '0.8.8'
+    id 'idea'
+}
+
+group = 'com.aanrii'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    jcenter()
+//    maven {
+//        url 'https://dl.bintray.com/netifi/netifi-oss/'
+//    }
+}
+
+ext {
+    rsocketRpcVersion = '0.2.18'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-rsocket'
+    implementation "io.rsocket.rpc:rsocket-rpc-core:$rsocketRpcVersion"
+    implementation 'com.google.protobuf:protobuf-java:3.11.0'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.11.0'
+    }
+    plugins {
+        rsocketRpc {
+            artifact = "io.rsocket.rpc:rsocket-rpc-protobuf:$rsocketRpcVersion"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            rsocketRpc {}
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDirs '../proto'
+        }
+        java {
+            srcDirs 'build/generated/source/proto/main/rsocketRpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
